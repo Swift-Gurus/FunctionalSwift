@@ -19,6 +19,13 @@ class ALResultTestCases: XCTestCase {
         ALResult(str).testResultIsRight(expectedValue: str)                                
     }
     
+    func test_result_do_is_called() {
+        var result = ""
+        let initial = "Test"
+        ALResult(initial).do { result = $0}
+        XCTAssertEqual(result, initial)
+    }
+    
     
     func test_result_initialized_from_error() {
         let error = MockError.notFound

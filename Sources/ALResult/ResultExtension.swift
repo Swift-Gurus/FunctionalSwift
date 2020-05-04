@@ -8,15 +8,33 @@
 import Foundation
     
 
-
-
 extension Result {
     
-    /// Side effect function on success
-    /// - Parameter work: a closure to perform on success
-    /// - Returns: Result without any changes
-    @discardableResult
+    public init(_ success: Success) {
+        self = .success(success)
+    }
+      
+    public init(_ failure: Failure) {
+        self = .failure(failure)
+    }
     
+    /// Performs side - effect closure on success
+    ///
+    /// Use this method when you need to perform side-effect function using
+    /// the value of a `Result`  The following example prints value of
+    /// the integer  on success:
+    ///
+    ///     func getNextInteger() -> Result<Int, Error> { /* ... */ }
+    ///
+    ///     let integerResult = getNextInteger()
+    ///     // integerResult == .success(5)
+    ///     let stringResult = integerResult.do({ debugPrint($0) }).map({ String($0) })
+    ///     // console print: 5
+    ///
+    /// - Parameter work: A closure that takes the success value of this
+    ///   instance.
+    /// - Returns: An  unmodified`Result`
+    @discardableResult
     public func `do`(_ work: (Success) -> Void) -> Self {
         if case .success(let val) = self {
             work(val)
@@ -24,11 +42,23 @@ extension Result {
         return self
     }
     
-    ///  Side effect function on failure
-    /// - Parameter work: a closure to perform on failure
-    /// - Returns: Result without any changes
+    /// Performs side - effect closure on failure
+    ///
+    /// Use this method when you need to perform side-effect function using
+    /// the value of a `Result`  The following example prints value of
+    /// the integer  on success:
+    ///
+    ///     func getNextInteger() -> Result<Int, Error> { /* ... */ }
+    ///
+    ///     let integerResult = getNextInteger()
+    ///     // integerResult == .error(NotFound)
+    ///     let stringResult = integerResult.onError({ // notify about the error })
+    ///     // console print: 5
+    ///
+    /// - Parameter work: A closure that takes the failure value of this
+    ///   instance.
+    /// - Returns: An  unmodified`Result`
     @discardableResult
-    
     public func onError(_ work: (Failure) -> Void) -> Self {
         if case .failure(let err) = self {
             work(err)
@@ -39,17 +69,43 @@ extension Result {
 
 extension Result where Failure == Error {
     
-    public func `do`(work: (Success) throws -> Void) -> Self {
-       do {
-           if case .success(let val) = self {
-              try work(val)
-           }
-           return self
-       } catch {
-           return .failure(error)
-       }
+    public init(success: Success?, error: Failure?) {
+        if let e = error {
+            self = .failure(e)
+            return
+        }
+
+        if let v = success {
+            self = .success(v)
+            return
+        }
+
+        let error = NSError(domain: "ALResult",
+                            code: -1,
+                            userInfo: ["msg": "Couldn't create monad out of 2 optionals"])
+        self = .failure(error)
     }
     
+  
+    /// Returns a new result, mapping any success value using the given
+    /// transformation.
+    ///
+    /// Use this method when you need to transform the value of a `Result`
+    /// instance when it represents a success. The following example transforms
+    /// the integer success value of a result into a string:
+    ///
+    ///     func getNextInteger() -> Result<Int, Error> { /* ... */ }
+    ///
+    ///     let integerResult = getNextInteger()
+    ///     // integerResult == .success(5)
+    ///     let stringResult = integerResult.map({ String($0) })
+    ///     // stringResult == .success("5")
+    ///
+    /// - Parameter transform: A closure that takes the success value of this
+    ///   instance.
+    /// - Returns: A `Result` instance with the result of evaluating `transform`
+    ///   as the new success value if this instance represents a success.
+    /// - Note: transform can throw and convert result state into .failure
     public func tryMap<NewSuccess>(_ transform: (Success) throws  -> NewSuccess) -> Result<NewSuccess, Failure> {
   
         switch self {
@@ -63,9 +119,16 @@ extension Result where Failure == Error {
         case let .failure(err):
             return .failure(err)
         }
-
     }
     
+    /// Returns a new result, mapping any success value using the given
+    /// transformation and unwrapping the produced result.
+    ///
+    /// - Parameter transform: A closure that takes the success value of the
+    ///   instance.
+    /// - Returns: A `Result` instance with the result of evaluating `transform`
+    ///   as the new failure value if this instance represents a failure.
+    /// - Note: transform can throw and convert result state into .failure
     public func tryFlatMap<NewSuccess>(_ transform: (Success) throws -> Result<NewSuccess, Failure>) -> Result<NewSuccess, Failure> {
         switch self {
         case let .success(val):
@@ -80,24 +143,5 @@ extension Result where Failure == Error {
         }
     }
     
-    public init(_ success: Success) {
-         self = .success(success)
-     }
-    
-    public init(_ failure: Failure) {
-        self = .failure(failure)
-    }
-    
-    public init(success: Success?, error: Failure?) {
-          if let e = error {
-              self = .failure(e)
-              return
-          }
-
-          if let v = success {
-              self = .success(v)
-              return
-          }
-          self = .failure(NSError(domain: "ALResult", code: -1, userInfo: ["msg": "Couldn't create monad out of 2 optionals"]))
-    }
+  
 }
