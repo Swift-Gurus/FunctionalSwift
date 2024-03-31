@@ -35,12 +35,13 @@ force_unwrapping: error
 line_length: 150
 
 type_body_length:
-  - 50 # warning
-  - 150 # error
-# or they can set both explicitly
+  warning: 50 # warning
+  error: 100 # error
+
 file_length:
   warning: 300
   error: 400
+  ignore_comment_only_lines: true
 
 type_name:
   min_length: 4 # only warning
@@ -51,10 +52,3 @@ type_name:
 
 reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji, sonarqube, markdow
 
-excluded:
-  - ${PWD}/Pods
-  - ${PWD}/DerivedData
-  - ${PWD}/.build
-  - ${PWD}/VoodooAdn/Tests
-  - ${PWD}/VoodooAdn/SourceCode/Legacy
-  - ${PWD}/Packages/*/*/Tests
