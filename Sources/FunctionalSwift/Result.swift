@@ -92,13 +92,13 @@ public extension Result where Failure == Error {
     ///   instance.
     /// - Returns: An `Result`
     init(success: Success?, error: Failure?) {
-        if let error {
-            self = .failure(error)
+        if let e = error {
+            self = .failure(e)
             return
         }
 
-        if let success {
-            self = .success(success)
+        if let v = success {
+            self = .success(v)
             return
         }
 
@@ -149,9 +149,7 @@ public extension Result where Failure == Error {
     /// - Returns: A `Result` instance with the result of evaluating `transform`
     ///   as the new failure value if this instance represents a failure.
     /// - Note: transform can throw and convert result state into .failure
-    func tryFlatMap<NewSuccess>(
-        _ transform: (Success) throws -> Result<NewSuccess, Failure>
-    ) -> Result<NewSuccess, Failure> {
+    func tryFlatMap<NewSuccess>(_ transform: (Success) throws -> Result<NewSuccess, Failure>) -> Result<NewSuccess, Failure> {
         switch self {
         case let .success(val):
             do {
@@ -165,8 +163,7 @@ public extension Result where Failure == Error {
         }
     }
 
-    /// Performs side - effect  closure on success with try-catch functionality.
-    /// If do throws an error it converts the state to .failure
+    /// Performs side - effect  closure on success with try-catch functionality. If do throws an error it converts the state to .failure
     ///
     /// Use this method when you need to perform side-effect function using
     /// the value of a `Result`  The following example prints value of
