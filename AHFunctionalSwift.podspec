@@ -7,14 +7,14 @@
 #
 
 Pod::Spec.new do |s|
-s.name             = 'FunctionalSwift'
+s.name             = 'AHFunctionalSwift'
 s.version          = '0.2.1'
 s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.homepage         = 'https://github.com/Swift-Gurus/FunctionalSwift.git'
 s.author           = { 'AlexHmelevskiAG' => 'alex.hmelevski@gmail.com' }
 s.summary          = 'Easy framework for EitherMonad'
 s.source           = { :git => 'https://github.com/Swift-Gurus/FunctionalSwift.git', :tag => s.version.to_s }
-s.module_name  = 'FunctionalSwift'
+s.module_name  = 'AHFunctionalSwift'
 
 s.ios.deployment_target = '14.0'
 s.swift_version = '5.0'
