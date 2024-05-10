@@ -1,4 +1,4 @@
-@testable import FunctionalSwift
+@testable import AHFunctionalSwift
 import XCTest
 
 final class OptionalTestCases: XCTestCase {
