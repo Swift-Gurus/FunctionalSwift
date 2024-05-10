@@ -6,6 +6,10 @@ precedencegroup transformOperator {
     associativity: left
 }
 
+public func »<T,U>(input: T, transform: (T) -> U) -> U {
+    return transform(input)
+}
+
 public extension Optional {
     /// Conditional function, returns Either with valid value according to predicate block
     /// If predicate false - returns nil
