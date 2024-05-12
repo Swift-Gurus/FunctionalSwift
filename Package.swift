@@ -4,24 +4,24 @@
 import PackageDescription
 
 let package = Package(
-    name: "AHFunctionalSwift",
+    name: "FunctionalSwift",
     platforms: [.iOS(.v12), .macOS(.v12)],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
-            name: "AHFunctionalSwift",
-            targets: ["AHFunctionalSwift"]
+            name: "FunctionalSwift",
+            targets: ["FunctionalSwift"]
         )
     ],
     targets: [
         .target(
-            name: "AHFunctionalSwift",
+            name: "FunctionalSwift",
             dependencies: []
         ),
 
         .testTarget(
             name: "FunctionalSwiftTests",
-            dependencies: ["AHFunctionalSwift"]
+            dependencies: ["FunctionalSwift"]
         )
     ]
 )

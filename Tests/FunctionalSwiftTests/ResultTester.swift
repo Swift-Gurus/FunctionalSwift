@@ -1,6 +1,6 @@
 import Foundation
 
-@testable import AHFunctionalSwift
+@testable import FunctionalSwift
 import XCTest
 
 enum MockError: Error {
