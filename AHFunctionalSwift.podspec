@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
 s.name             = 'AHFunctionalSwift'
-s.version          = '0.2.8'
+s.version          = '0.2.7'
 s.license          = { :type => 'MIT', :file => 'LICENSE' }
 s.homepage         = 'https://github.com/Swift-Gurus/FunctionalSwift.git'
 s.author           = { 'AlexHmelevskiAG' => 'alex.hmelevski@gmail.com' }
